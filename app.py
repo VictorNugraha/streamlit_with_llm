@@ -16,16 +16,24 @@ from langchain_core.runnables import RunnablePassthrough
 
 # Add a title to the sidebar
 with st.sidebar:
-    st.sidebar.title('Menu')
 
+    st.sidebar.title('Sidebar Selection')
+
+    st.button("How to Use The App", on_click = display_how_to)
+
+    st.sidebar.markdown('---')
+    
     option = st.sidebar.selectbox(
-        'Choose an option',
+        'Choose Menu',
         ('Home', 'QnA', 'Summarizer')
     )
 
     st.sidebar.markdown('---')
 
     api_key = st.text_input("Input your Open AI API key")
+
+    st.sidebar.markdown('---')
+
     uploaded_file = st.file_uploader("Upload your PDF file", type = ["pdf"])
 
 # Display content based on the selected option
@@ -49,7 +57,7 @@ elif option == 'QnA':
         # 2. Split
         text_splitter = RecursiveCharacterTextSplitter(chunk_size = 1000, chunk_overlap = 200)
         splits = text_splitter.split_documents(docs)
-
+        
         # 3. Save
         vectorstore = Chroma.from_documents(documents = splits, 
                                     embedding = OpenAIEmbeddings(openai_api_key = api_key))
